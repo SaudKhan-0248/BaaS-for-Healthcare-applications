@@ -1,0 +1,103 @@
+<div class="dashboard">
+    <h1>Dashboard</h1>
+
+    <div class="insights">
+        <div class="total">
+            <span class="material-symbols-sharp">html</span>
+            <div class="middle">
+                <div class="left">
+                    <h3>Total Requests</h3>
+                    <h1 id="total-req">{{request_count['total_req']}}</h1>
+                </div>
+                <div class="performance">
+                    <svg>
+                        <circle cx="38" cy="38" r="36"></circle>
+                        <div class="number">
+                            <p>100%</p>
+                        </div>
+                    </svg>
+                </div>
+            </div>
+            <small class="text-muted">Overall Statistics</small>
+        </div>
+
+        <div class="successful">
+            <span class="material-symbols-sharp">html</span>
+            <div class="middle">
+                <div class="left">
+                    <h3>Successful Responses</h3>
+                    <h1 id="success-resp">{{request_count.success_resp}}</h1>
+                </div>
+                <div class="performance">
+                    <svg>
+                        <circle cx="38" cy="38" r="36"></circle>
+                        <div class="number">
+                            <p id="total-req-percentage">
+                                {% if request_count.total_req > 0 %}
+                                    {{ "%.1f"|format((request_count.success_resp / request_count.total_req) * 100) }}%
+                                {% else %}
+                                 0%
+                                {% endif %}
+                            </p>
+                          
+                        </div>
+                    </svg>
+                </div>
+            </div>
+            <small class="text-muted">Overall Statistics</small>
+        </div>
+
+        <div class="error">
+            <span class="material-symbols-sharp">html</span>
+            <div class="middle">
+                <div class="left">
+                    <h3>Error Responses</h3>
+                    <h1 id="error-resp">{{request_count['error_resp']}}</h1>
+                </div>
+                <div class="performance">
+                    <svg>
+                        <circle cx="38" cy="38" r="36"></circle>
+                        <div class="number">
+                            <p id="total-req-percentage">
+                                {% if request_count.total_req > 0 %}
+                                    {{ "%.1f"|format((request_count.error_resp / request_count.total_req) * 100) }}%
+                                {% else %}
+                                 0%
+                                {% endif %}
+                            </p>
+                        </div>
+                    </svg>
+                </div>
+            </div>
+            <small class="text-muted">Overall Statistics</small>
+        </div>
+    </div>
+
+    <div class="recent-requests">
+        <h2>Recent Requests</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th>Status Code</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Response Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in api_logs %}
+                    <tr>
+                        <td class="{% if record.method == 'GET' %}success{% elif record.method == 'POST' %}warning{% elif record.method == 'DELETE' %}danger{% endif %}">{{record.method}}</td>
+                        <td>{{record.path}}</td>
+                        <td class="{% if record.status_code // 100 == 2 %}success{% elif record.status_code // 100 == 4 or record.status_code // 100 == 5 %}danger{% else %}warning{% endif %}">{{record.status_code}}</td>
+                        <td>{{record.date}}</td>
+                        <td>{{record.time}}</td>
+                        <td>{{record.resp_time}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

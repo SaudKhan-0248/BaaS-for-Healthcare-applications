@@ -1,0 +1,10 @@
+Healthcare API/api.log
+portal/auth.log
+
+Healthcare API/api/.env
+Monitoring Service/.env
+portal/src/.env
+
+Healthcare API/api/__pycache__/
+Healthcare API/api/routes/__pycache__/
+portal/src/__pycache__/

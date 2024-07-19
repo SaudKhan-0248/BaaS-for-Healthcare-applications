@@ -1,0 +1,32 @@
+<div class="profile-section">
+    <h1>Your Profile</h1>
+
+    <div class="profile-info">
+        <div class="about">
+            <h2>About</h2>
+            <div class="about-info">
+                <p><span>Username</span>{{user.username}}</p>
+                <p><span>Email</span>{{user.email}}</p>
+                <p><span>DOB</span>{{user.dob}}</p>
+                <p><span>Age</span>{{user.age}} Years</p>
+                <p><span>Gender</span>{{user.gender}}</p>
+            </div>
+        </div>
+        <div class="apikey">
+            <h2>API Key</h2>
+            <small>To use our API, you will need an API key that uniquely identifies and authorizes your requests. 
+                To obtain your key, simply click the "Get Key" button below, and you will receive the API Key via email. 
+                Keep your API key secure and never share it publicly. 
+                Make sure to include your key in the authorization header of your requests. 
+                If you suspect any misuse of your key, be sure to regenerate it immediately. 
+                However, please note that doing so will invalidate any previously allocated keys. 
+                For more details and best practices, please refer to our API documentation.
+            </small>
+            <div class="get-key">
+                <button hx-get="http://localhost:8001/key" hx-target=".keyMessage" hx-swap="innerHTML">Get Key</button>
+            </div>
+            <div class="keyMessage">
+            </div>
+        </div>
+    </div>
+</div>

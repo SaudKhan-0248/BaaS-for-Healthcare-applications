@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp" rel="stylesheet" />
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <script src="https://unpkg.com/htmx.org@1.9.12"
+        integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <aside>
+            <div class="top">
+                <div class="logo">
+                    <img src="{{url_for('static', filename='images/logo.png')}}" alt="">
+                    <h2>Healthcare Service <span class="danger">API</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-symbols-sharp">close</span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a hx-get="http://localhost:8001/dashboard" hx-target="#main" class="active">
+                    <span class="material-symbols-sharp">dashboard</span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a hx-get="http://localhost:8001/profile" hx-target="#main">
+                    <span class="material-symbols-sharp">person</span>
+                    <h3>Profile</h3>
+                </a>
+                <a href="http://localhost:8001/api/docs" target="_blank">
+                    <span class="material-symbols-sharp">terminal</span>
+                    <h3>Interactive Docs</h3>
+                </a>
+                <a href="http://localhost:8001/auth/logout">
+                    <span class="material-symbols-sharp">logout</span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+
+        <main id="main">
+            {% include 'partials/dashboard.html' %}
+        </main>
+
+        <div class="right">
+            <div class="top">
+                <button id="menu-btn">
+                    <span class="material-symbols-sharp">menu</span>
+                </button>
+                <div class="theme-toggler">
+                    <span class="material-symbols-sharp active">light_mode</span>
+                    <span class="material-symbols-sharp">dark_mode</span>
+                </div>
+                <div class="profile">
+                    <div class="info">
+                        <p>Hey, <b>Saud</b></p>
+                        <small class="text-muted">Welcome!</small>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="{{url_for('static', filename='images/profile.jpeg')}}" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-insights">
+                <h2>Quick Insights</h2>
+                <small class="text-muted">Overall Statistics</small>
+                <div class="insights">
+                    <div class="insight">
+                        <span class="material-symbols-sharp">schedule</span>
+                        <p><b>Peak Hour:  </b>{{api_analysis.peak_hour}}</p>
+                    </div>
+                    <div class="insight">
+                        <span class="material-symbols-sharp">bar_chart_4_bars</span>
+                        <p><b>Requests in peak hour:  </b>{{api_analysis.requests_in_peak_hour}}</p>
+                    </div>
+                    <div class="insight">
+                        <span class="material-symbols-sharp">target</span>
+                        <p><b>Top Enpoint:  </b>{{api_analysis.top_endpoint}}</p>
+                    </div>
+                    <div class="insight">
+                        <span class="material-symbols-sharp">bar_chart_4_bars</span>
+                        <p><b>Requests to top endpoint:  </b>{{api_analysis.requests_to_top_endpoint}}</p>
+                    </div>
+                    <div class="insight">
+                        <span class="material-symbols-sharp">speed</span>
+                        <p><b>Response Rate:  </b>{{api_analysis.average_response_time}} seconds</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="{{url_for('static', filename='index.js')}}"></script>
+</body>
+
+</html>

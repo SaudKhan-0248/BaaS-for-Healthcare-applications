@@ -1,0 +1,1174 @@
+openapi: 3.0.3
+info:
+  title: Healthcare Services API
+  description: This is our Healthcare Services API that let you develop healthcare applications effortlessly.
+  version: "1.0"
+
+servers:
+  - url: http://localhost:8002
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+security:
+  - ApiKeyAuth: []
+
+tags:
+  - name: Patient Management
+    description: Endpoints for Patient Management
+  - name: Doctor Management
+    description: Endpoints for Doctor Management
+  - name: OPD Record Management
+    description: Endpoints for OPD Record Management
+  - name: IPD Record Management
+    description: Endpoints for IPD Record Management
+  - name: ER Record Management
+    description: Endpoints for ER Record Management
+  - name: Appointment Management
+    description: Endpoints for Appointment Management
+  - name: Diagnosis Model
+    description: Endpoint to predict diseases on basis of Symptoms
+
+paths:
+  /api/patients:
+    get:
+      tags:
+        - "Patient Management"
+      description: Get all Patients records
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                [{"id": "665186afb873a548422f9b79",
+                  "name": "Patient 1",
+                  "contact_no": "0123456789"},
+                  {"id": "665186dbb873a548422f9b7b",
+                  "name": "Patient 2",
+                  "contact_no": "9876543210"}]
+  
+    post:
+      tags:
+        - "Patient Management"
+      description: Add Patient Record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstname:
+                  type: string
+                  example: <patient's firstname here>
+                lastname:
+                  type: string
+                  example: <patient's lastname here>
+                dob:
+                  type: string
+                  example: <dob here>
+                gender:
+                  type: string
+                  enum:
+                    - MALE
+                    - FEMALE
+                blood_group:
+                  type: string
+                  enum:
+                    - A+
+                    - A-
+                    - B+
+                    - B-
+                    - O+
+                    - O-
+                    - AB+
+                    - AB-
+                contact_no:
+                  type: string
+                  example: <contact_no>
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Patient has been Added Successfully!
+                  patient_name:
+                    type: string
+                    example: Patient 1
+  
+  /api/patients/{patient_id}:
+    get:
+      tags:
+        - "Patient Management" 
+      description: Get a Specific Patient record
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 665186afb873a548422f9b79
+      responses:
+        200:
+          description: Succcess
+          content:
+            application/json:
+              example:
+                {"_id": "665186afb873a548422f9b79",
+                  "firstname": "patient",
+                  "lastname": "1",
+                  "age": "38",
+                  "blood_group": "A+",
+                  "contact_no": "0123456789",
+                  "dob": "1985-08-14 00:00:00",
+                  "gender": "MALE",
+                  "uid": "6651862de66ba56c4dd11a9d"
+                  }
+
+    put:
+      tags:
+        - "Patient Management"
+      description: Update a specific Patient record
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 665186afb873a548422f9b79
+      requestBody:
+        required: True
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                field_you_want_to_update:
+                  type: string
+                  example: updated value
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Record updated Successfully!
+                  patient_id:
+                    type: string
+                    example: 665186afb873a548422f9b79
+
+    delete:
+      tags:
+        - "Patient Management"
+      description: Delete a specific Patient record
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 665186afb873a548422f9b79
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                message: Record Deleted Successfully!
+
+  /api/doctors:
+    get:
+      tags:
+        - "Doctor Management"
+      description: Get all Doctors records
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                [{"id": "665187a854a5210f0ce74683",
+                  "name": "Doctor 1",
+                  "contact_no": "0123456789"},
+                  {"id": "665187c754a5210f0ce74685",
+                  "name": "Doctor 2",
+                  "contact_no": "9876543210"}]
+  
+    post:
+      tags:
+        - "Doctor Management"
+      description: Add Doctor Record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: <doctor's name here>
+                dob:
+                  type: string
+                  example: <dob here>
+                gender:
+                  type: string
+                  enum:
+                    - MALE
+                    - FEMALE
+                contact_no:
+                  type: string
+                  example: <contact_no>
+                job_title:
+                  type: string
+                  example: <job_title>
+                speciality:
+                  type: string
+                  example: <speciality>
+                qualification:
+                  type: string
+                  example: <qualification>
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Doctor has been Added Successfully!
+                  patient_name:
+                    type: string
+                    example: Doctor 1
+
+  /api/doctors/{doctor_id}:
+    get:
+      tags:
+        - "Doctor Management" 
+      description: Get a Specific Doctor record
+      parameters:
+        - name: doctor_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 665187a854a5210f0ce74683
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                {"_id": "665187a854a5210f0ce74683",
+                  "name": "doctor1",
+                  "age": "38",
+                  "contact_no": "0123456789",
+                  "dob": "1980-06-15 00:00:00",
+                  "gender": "MALE",
+                  "job_title": "Cardiologist",
+                  "speciality": "Cardiology",
+                  "qualification": "MBBBS",
+                  "uid": "6651862de66ba56c4dd11a9d"
+                  }
+
+    put:
+      tags:
+        - "Doctor Management"
+      description: Update a specific Doctor record
+      parameters:
+        - name: doctor_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 665187a854a5210f0ce74683
+      requestBody:
+        required: True
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                field_you_want_to_update:
+                  type: string
+                  example: updated value
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Record updated Successfully!
+                  doctor_id:
+                    type: string
+                    example: 665187a854a5210f0ce74683
+
+    delete:
+      tags:
+        - "Doctor Management"
+      description: Delete a specific Doctor record
+      parameters:
+        - name: doctor_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 665187a854a5210f0ce74683
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                message: Record Deleted Successfully!  
+
+  /api/opd:
+    get:
+      tags:
+        - "OPD Record Management"
+      description: Get all OPD records
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                [{"patient_id": "665186afb873a548422f9b79",
+                  "opds": [{"ID": "b0a4f529-78b4-4c12-8a1c-50c526384323",
+                            "doctor": "Doctor 1",
+                            "date": "2024-05-24"},
+                            {"ID": "90449f92-ae2a-4de4-80f6-48b90b707f57",
+                              "doctor": "Doctor 2",
+                              "date": "2024-05-25"}]},
+                  {"patient_id": "665186dbb873a548422f9b7b",
+                    "opds": [{"ID": "8af925de-8d15-458f-9f25-ea85104760f5",
+                              "doctor": "Doctor 1",
+                              "date": "2024-05-25"}]}]
+
+  /api/opd/byDate:
+    get:
+      tags:
+        - "OPD Record Management"
+      description: Get OPD Records by Date
+      parameters:
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "2024-06-04"
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                [{"patient_id": "665186afb873a548422f9b79",
+                  "opds": [{"ID": "b0a4f529-78b4-4c12-8a1c-50c526384323",
+                            "doctor": "Doctor 1",
+                            "date": "2024-05-24"},
+                            {"ID": "90449f92-ae2a-4de4-80f6-48b90b707f57",
+                              "doctor": "Doctor 2",
+                              "date": "2024-06-04"}]},
+                  {"patient_id": "665186dbb873a548422f9b7b",
+                    "opds": [{"ID": "8af925de-8d15-458f-9f25-ea85104760f5",
+                              "doctor": "Doctor 1",
+                              "date": "2024-06-04"}]}]
+
+  /api/opd/{patient_id}:
+    get:
+      tags:
+        - "OPD Record Management"
+      description: Get OPD records of a particular Patient
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 665186afb873a548422f9b79
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                { "OPD Records": [{"ID": "b0a4f529-78b4-4c12-8a1c-50c526384323",
+                                    "doctor": "Doctor 1",
+                                    "date": "2024-05-24"},
+                                  {"ID": "90449f92-ae2a-4de4-80f6-48b90b707f57",
+                                    "doctor": "Doctor 2",
+                                    "date": "2024-05-25"}]}
+
+    post:
+      tags:
+        - "OPD Record Management"
+      description: Add OPD Record
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 665186afb873a548422f9b79
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                doctor:
+                  type: string
+                  example: <doctor's name here>
+                disease_description:
+                  type: string
+                  example: <disease description here>
+                primary_diagnosis:
+                  type: string
+                  example: <primary diagnosis here>
+                prescription:
+                  type: string
+                  example: <prescription here>
+                date:
+                  type: string
+                  example: "2014-06-04"
+                time:
+                  type: string
+                  example: "10:35:42"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                message: "Record added Successfully!"
+
+  /api/opd/{patient_id}/{opd_id}:
+    get:
+      tags:
+        - "OPD Record Management"
+      description: Get a specific OPD Record
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "665186afb873a548422f9b79"
+        - name: opd_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "b0a4f529-78b4-4c12-8a1c-50c526384323"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                { "OPD Record": {"date": "2024-05-24",
+                                "disease_description": "Severe pain and burning in esophagus",
+                                "doctor": "Doctor 1",
+                                "id": "b0a4f529-78b4-4c12-8a1c-50c526384323",
+                                "prescription": "Anti-acidity Medication",
+                                "primary_diagnosis": "Peptic Ulcer",
+                                "time": "08:18:30"}}
+
+    delete:
+      tags:
+        - "OPD Record Management"
+      description: Delete a specific OPD Record
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "665186afb873a548422f9b79"
+        - name: opd_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "b0a4f529-78b4-4c12-8a1c-50c526384323"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                message: Record Deleted Successfully!
+
+
+  /api/opd/byDate/{patient_id}:
+    get:
+      tags:
+        - "OPD Record Management"
+      description: Get a specific Patient's OPD Records by Date
+      parameters:
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "2024-06-04"
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "665186afb873a548422f9b79"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                [{ "OPD Records": [{"id": "b0a4f529-78b4-4c12-8a1c-50c526384323",
+                                    "doctor": "Doctor 1",
+                                    "disease_description": "Sever burning in esophagus",
+                                    "prescription": "Anti-acidity Medication",
+                                    "primary_diagnosis": "Peptic Ulcer",
+                                    "time": "08:18:30",
+                                    "date": "2024-06-04"},
+                                  {"id": "b0a4f529-78b4-4c12-8a1c-50c526384323",
+                                    "doctor": "Doctor 1",
+                                    "disease_description": "pain and numbness in both arms",
+                                    "prescription": "Muscle relax Medications",
+                                    "primary_diagnosis": "Herniated Disc",
+                                    "time": "08:18:30",
+                                    "date": "2024-06-04"}]}]
+
+  /api/ipd:
+    get:
+      tags:
+        - "IPD Record Management"
+      description: Get all IPD records
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                [{"patient_id": "665186afb873a548422f9b79",
+                  "ipds": [{"ID": "dc28f399-9f8b-4200-ab3c-9fd107883b59",
+                            "admission": "2024-05-20",
+                            "chief_complaint": "Head Injury"},
+                            {"ID": "90449f92-ae2a-4de4-80f6-48b90b707f57",
+                              "admission": "2024-03-12",
+                              "chief_complaint": "Broken ribs"}]},
+                  {"patient_id": "665186dbb873a548422f9b7b",
+                    "ipds": [{"ID": "8af925de-8d15-458f-9f25-ea85104760f5",
+                              "admission": "2024-05-25",
+                              "chief_complaint": "Dehydration"}]}]
+
+  /api/ipd/byDate:
+    get:
+      tags:
+        - "IPD Record Management"
+      description: Get IPD Records by Date
+      parameters:
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "2024-06-04"
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                {"IPD Records": [{"patient_id": "665186afb873a548422f9b79",
+                                  "ipds": [{"ID": "dc28f399-9f8b-4200-ab3c-9fd107883b59",
+                                            "admission": "2024-06-04",
+                                            "chief_complaint": "Head Injury"},
+                                          ]},
+                                {"patient_id": "665186dbb873a548422f9b7b",
+                                "ipds": [{"ID": "8af925de-8d15-458f-9f25-ea85104760f5",
+                                          "admission": "2024-06-04",
+                                          "chief_complaint": "Dehydration"}]}]}
+
+  /api/ipd/{patient_id}:
+    get:
+      tags:
+        - "IPD Record Management"
+      description: Get IPD records of a particular Patient
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 665186afb873a548422f9b79
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                { "IPD Records": [{"ID": "dc28f399-9f8b-4200-ab3c-9fd107883b59",
+                                    "admission": "2024-05-20",
+                                    "chief_complaint": "Head Injury"},
+                                  {"ID": "90449f92-ae2a-4de4-80f6-48b90b707f57",
+                                    "admission": "2024-03-12",
+                                    "chief_complaint": "Broken ribs"}]}
+
+    post:
+      tags:
+        - "IPD Record Management"
+      description: Add IPD Record
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 665186afb873a548422f9b79
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                admission_date:
+                  type: string
+                  example: <admission_date here>
+                discharge_date:
+                  type: string
+                  example: <discharge date here>
+                chief_complaint:
+                  type: string
+                  example: <chief_complaint here>
+                room_no:
+                  type: integer
+                  example: <room_no here>
+                ward_no:
+                  type: integer
+                  example: <ward_no here>
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                message: "Record added Successfully!"
+
+  /api/ipd/{patient_id}/{ipd_id}:
+    get:
+      tags:
+        - "IPD Record Management"
+      description: Get a specific IPD Record
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "665186afb873a548422f9b79"
+        - name: ipd_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "dc28f399-9f8b-4200-ab3c-9fd107883b59"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                { "OPD Record": {"admission_date": "2024-05-20",
+                                "chief_complaint": "Head Injury",
+                                "discharge_date": "2024-05-24",
+                                "id": "dc28f399-9f8b-4200-ab3c-9fd107883b59",
+                                "room_no": "43"
+                                }}
+
+    delete:
+      tags:
+        - "IPD Record Management"
+      description: Delete a specific IPD Record
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "665186afb873a548422f9b79"
+        - name: ipd_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "dc28f399-9f8b-4200-ab3c-9fd107883b59"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                message: Record Deleted Successfully!
+
+  /api/ipd/byDate/{patient_id}:
+    get:
+      tags:
+        - "IPD Record Management"
+      description: Get a specific Patient's IPD Records by Date
+      parameters:
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "2024-06-04"
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "665186afb873a548422f9b79"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                [{ "IPD Records": [{"ID": "dc28f399-9f8b-4200-ab3c-9fd107883b59",
+                                    "admission": "2024-06-04",
+                                    "chief_complaint": "Head Injury"
+                                    }
+                                  ]}]
+
+  /api/er:
+    get:
+      tags:
+        - "ER Record Management"
+      description: Get all ER records
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                [{"patient_id": "665186afb873a548422f9b79",
+                  "err": [{"ID": "20f0c670-c37a-4ba6-8a46-ff28e01a9502",
+                            "chief_complaint": "Head Injury",
+                            "date": "2024-05-20"}
+                            ]},
+                  {"patient_id": "665186dbb873a548422f9b7b",
+                    "err": [{"ID": "8af925de-8d15-458f-9f25-ea85104760f5",
+                              "date": "2024-05-25",
+                              "chief_complaint": "Broken Nose"}]}]
+
+  /api/er/byDate:
+    get:
+      tags:
+        - "ER Record Management"
+      description: Get ER Records by Date
+      parameters:
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "2024-06-04"
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                {"ER Records": [{"patient_id": "665186afb873a548422f9b79",
+                                  "err": [{"ID": "dc28f399-9f8b-4200-ab3c-9fd107883b59",
+                                            "date": "2024-06-04",
+                                            "chief_complaint": "Head Injury"},
+                                          ]},
+                                {"patient_id": "665186dbb873a548422f9b7b",
+                                "err": [{"ID": "8af925de-8d15-458f-9f25-ea85104760f5",
+                                          "date": "2024-06-04",
+                                          "chief_complaint": "Broken Nose"}]}]}
+
+  /api/er/{patient_id}:
+    get:
+      tags:
+        - "ER Record Management"
+      description: Get ER records of a particular Patient
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 665186afb873a548422f9b79
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                {"ER Records": [{"ID": "20f0c670-c37a-4ba6-8a46-ff28e01a9502",
+                                  "date": "2024-05-20",
+                                  "chief_complaint": "Head Injury"},
+                                  {"ID": "90449f92-ae2a-4de4-80f6-48b90b707f57",
+                                    "date": "2024-03-12",
+                                    "chief_complaint": "Broken ribs"}]}
+
+    post:
+      tags:
+        - "ER Record Management"
+      description: Add ER Record
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 665186afb873a548422f9b79
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                doctor:
+                  type: string
+                  example: <doctor's name here>
+                date:
+                  type: string
+                  example: <date here>
+                arrival_time:
+                  type: string
+                  example: <arrival_time here>
+                chief_complaint:
+                  type: string
+                  example: <chief_complaint here>
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                message: "Record added Successfully!"
+
+  /api/er/{patient_id}/{er_id}:
+    get:
+      tags:
+        - "ER Record Management"
+      description: Get a specific ER Record
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "665186afb873a548422f9b79"
+        - name: er_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "20f0c670-c37a-4ba6-8a46-ff28e01a9502"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                { "ER Record": {"id": "20f0c670-c37a-4ba6-8a46-ff28e01a9502",
+                                "chief_complaint": "Head Injury",
+                                "date": "2024-05-27",
+                                "arrival_time": "10:35:42",
+                                "doctor": "Doctor 1"
+                                }}
+
+    delete:
+      tags:
+        - "ER Record Management"
+      description: Delete a specific ER Record
+      parameters:
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "665186afb873a548422f9b79"
+        - name: er_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "20f0c670-c37a-4ba6-8a46-ff28e01a9502"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                message: Record Deleted Successfully!
+
+  /api/er/byDate/{patient_id}:
+    get:
+      tags:
+        - "ER Record Management"
+      description: Get a specific Patient's ER Records by Date
+      parameters:
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "2024-06-04"
+        - name: patient_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "665186afb873a548422f9b79"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                [{"ER Records": [{"ID": "dc28f399-9f8b-4200-ab3c-9fd107883b59",
+                                    "date": "2024-06-04",
+                                    "chief_complaint": "Head Injury"
+                                    }
+                                  ]}]
+
+  /api/appointments:
+    get:
+      tags:
+        - "Appointment Management"
+      description: Get all Appointments
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: patient_id
+          in: query
+          required: false
+          schema:
+            type: string
+            example: 665186afb873a548422f9b79
+        - name: doctor_id
+          in: query
+          required: false
+          schema:
+            type: string
+            example: 665187c754a5210f0ce74685
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                {"Appointments": [{"ID": "6652f7334d97c23168014069",
+                                  "Doctor ID": "665187c754a5210f0ce74685",
+                                  "Patient ID": "665186afb873a548422f9b79",
+                                  "Date": "Fri, 24 May 2024 00:00:00 GMT",
+                                  "Status": "cancelled"},
+                                  {"ID": "6652f7374d97c2316801406a",
+                                  "Doctor ID": "665187c754a5210f0ce74685",
+                                  "Patient ID": "665186afb873a548422f9b79",
+                                  "Date": "Sat, 25 May 2024 00:00:00 GMT",
+                                  "Status": "cancelled"}]}
+
+    post:
+      tags:
+        - "Appointment Management"
+      description: Add Appointment data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                patient_id:
+                  type: string
+                  example: <patient_id here>
+                doctor_id:
+                  type: string
+                  example: <doctor_id here>
+                date:
+                  type: string
+                  example: <date here>
+                status:
+                  type: string
+                  enum:
+                    - pending
+                    - done
+                    - cancelled
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                message: "Appointment added Successfully!"
+
+  /api/appointments/{app_id}:
+    get:
+      tags:
+        - "Appointment Management"
+      description: Get a Specific Appointment data
+      parameters:
+        - name: app_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 6652f7334d97c23168014069
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                {"Appointment": {"id": 6652f7334d97c23168014069,
+                                "Patient ID": "665186afb873a548422f9b79",
+                                "Doctor ID": "665187c754a5210f0ce74685",
+                                "Date": "2024-05-24T00:00:00.000+00:00",
+                                "status": "cancelled"}}
+
+    put:
+      tags:
+        - "Appointment Management"
+      description: Update Appointment Status
+      parameters:
+        - name: app_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 6652f7334d97c23168014069
+        - name: status
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - done
+              - pending
+              - cancelled
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                message: Successfully updated appointment status
+
+    delete:
+      tags:
+        - "Appointment Management"
+      description: Delete Appointment
+      parameters:
+        - name: app_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 6652f7334d97c23168014069
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                message: Record deleted Successfully!
+
+  /api/model/predict:
+    post:
+      tags:
+        - "Diagnosis Model"
+      description: Get prediction of diasease on basis of Symptoms
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                symptoms:
+                  type: string
+                  example: Chest Pain,Breathlessness,Sweating,Fast Heart Rate
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                predictions: {"rf_model_prediction": Heart Attack,
+                              "naive_bayes_prediction": Heart Attack,
+                              "svm_model_prediction": Heart Attack,
+                              "final_prediction": Heart Attack}
+                              
